@@ -201,7 +201,137 @@ export class ExampleComponent {
 
 ✅ **Computed properties automatically recalculate whenever the dependent signal changes.**
 
+
+
+## 📌 Angular Data Binding
+
+### 🔹 What is Data Binding?
+
+Data binding is a mechanism that connects the **UI (HTML)** with the **TypeScript class (Component)**. It ensures data synchronization between them.
+
+### 🔹 Types of Data Binding
+
+| Type | Syntax | Purpose |
+|------|--------|---------|
+| **Interpolation** | `{{ value }}` | Display dynamic data in the template |
+| **Property Binding** | `[property]="value"` | Bind element properties dynamically |
+| **Event Binding** | `(event)="function()"` | Handle user actions (click, input, etc.) |
+| **Two-Way Binding** | `[(ngModel)]="value"` | Sync input field with a component variable |
+
+#### 1️⃣ **Interpolation (`{{}}`)**
+```html
+<h1>{{ title }}</h1>
+```
+
+#### 2️⃣ **Property Binding (`[]`)**
+```html
+<img [src]="imageUrl" alt="Logo">
+```
+
+#### 3️⃣ **Event Binding (`()`)**
+```html
+<button (click)="increment()">Increase</button>
+```
+
+#### 4️⃣ **Two-Way Binding (`[()]`)**
+```html
+<input [(ngModel)]="name">
+```
+
 ---
 
-This is your **fully restored Angular notes document** with additional sections for **Angular Components** and **Signals with Computed Properties**! 🚀 Let me know if you need any modifications or new topics. 😊
+## 📌 `@Input()` and `@Output()` in Angular
+
+### 🔹 `@Input()` - Passing Data from Parent to Child
+
+- `@Input()` is a decorator in Angular used to pass **data from a parent component to a child component**.
+
+#### **Example: Using `@Input()`**
+```typescript
+import { Component, Input } from '@angular/core';
+
+@Component({
+  selector: 'app-child',
+  templateUrl: './child.component.html',
+  styleUrls: ['./child.component.css']
+})
+export class ChildComponent {
+  @Input() name!: string;  
+  @Input() avatar!: string;
+}
+```
+
+#### **Usage in Parent Component**
+```html
+<app-child [name]="user.name" [avatar]="user.avatar"></app-child>
+```
+
+### 🔹 `@Output()` - Emitting Events from Child to Parent
+
+- `@Output()` allows a **child component** to send an event to its **parent component**.
+
+#### **Example: Using `@Output()`**
+```typescript
+import { Component, Output, EventEmitter } from '@angular/core';
+
+@Component({
+  selector: 'app-child',
+  templateUrl: './child.component.html',
+  styleUrls: ['./child.component.css']
+})
+export class ChildComponent {
+  @Output() notifyParent = new EventEmitter<string>();  
+
+  sendMessage() {
+    this.notifyParent.emit('Hello Parent!');  
+  }
+}
+```
+
+#### **Usage in Parent Component**
+```html
+<app-child (notifyParent)="receiveMessage($event)"></app-child>
+<p>Message: {{ messageFromChild }}</p>
+```
+
+---
+
+## 📌 `@for`, `@if-else`, `*ngFor`, and `*ngIf-else` Directives in Angular
+
+### 🔹 `@for` Directive (Looping in Templates)
+```html
+<ul>
+  @for (user of users; track user.id) {
+    <li>{{ user.name }}</li>
+  }
+</ul>
+```
+
+### 🔹 `@if-else` Directive (Conditional Rendering)
+```html
+@if (isLoggedIn) {
+  <p>Welcome back!</p>
+} @else {
+  <p>Please log in.</p>
+}
+```
+
+### 🔹 `*ngFor` Directive
+```html
+<ul>
+  <li *ngFor="let user of users; trackBy: trackById">{{ user.name }}</li>
+</ul>
+```
+
+### 🔹 `*ngIf-else` Directive
+```html
+<div *ngIf="isLoggedIn; else loggedOut">
+  <p>Welcome back!</p>
+</div>
+<ng-template #loggedOut>
+  <p>Please log in.</p>
+</ng-template>
+```
+
+---
 
