@@ -334,4 +334,107 @@ export class ChildComponent {
 ```
 
 ---
+### 📌 **All Angular Directives (Structural & Attribute)**
+
+In Angular, **directives** are special markers on elements that tell Angular to **modify the structure or behavior of the DOM**. There are two main types:
+
+1. **Structural Directives** → Modify the DOM layout (e.g., adding/removing elements).  
+2. **Attribute Directives** → Modify the appearance or behavior of elements.
+
+---
+
+## 🔹 **1. Structural Directives**
+**Structural directives** are **prefixed with `*`** and change the **DOM layout** by adding, removing, or manipulating elements.
+
+| Directive  | Purpose  | Example  |
+|------------|----------|----------|
+| `*ngIf` | Conditionally renders elements | `<p *ngIf="isLoggedIn">Welcome</p>` |
+| `*ngIf else` | Renders alternative content | `<p *ngIf="isLoggedIn; else loggedOut">Welcome</p>` |
+| `*ngFor` | Loops through an array to render elements | `<li *ngFor="let item of items">{{ item }}</li>` |
+| `*ngSwitch` | Conditionally displays elements based on a value | `<div [ngSwitch]="role"><p *ngSwitchCase="'admin'">Admin</p></div>` |
+| `@if` (New) | Alternative for `*ngIf` in newer Angular versions | `@if (isLoggedIn) { <p>Welcome</p> } @else { <p>Login</p> }` |
+| `@for` (New) | Alternative for `*ngFor` | `@for (user of users) { <p>{{ user.name }}</p> }` |
+
+### ✅ **Example of Structural Directives**
+```html
+<ul>
+  <li *ngFor="let task of tasks; trackBy: trackTaskId">
+    {{ task.title }}
+  </li>
+</ul>
+
+<p *ngIf="isLoggedIn; else guestView">Welcome, User!</p>
+<ng-template #guestView><p>Please log in.</p></ng-template>
+
+<div [ngSwitch]="userRole">
+  <p *ngSwitchCase="'admin'">Admin Panel</p>
+  <p *ngSwitchCase="'user'">User Dashboard</p>
+  <p *ngSwitchDefault>Guest View</p>
+</div>
+```
+
+---
+
+## 🔹 **2. Attribute Directives**
+**Attribute directives** **modify the behavior or appearance** of an element.
+
+| Directive | Purpose | Example |
+|------------|----------|----------|
+| `[ngClass]` | Dynamically adds/removes CSS classes | `<p [ngClass]="{ active: isActive }">Hello</p>` |
+| `[ngStyle]` | Dynamically applies inline styles | `<p [ngStyle]="{ color: 'blue', fontSize: '20px' }">Styled Text</p>` |
+| `[disabled]` | Dynamically enables/disables an element | `<button [disabled]="isDisabled">Click</button>` |
+| `[(ngModel)]` | Two-way data binding in forms | `<input [(ngModel)]="name">` |
+
+### ✅ **Example of Attribute Directives**
+```html
+<input [(ngModel)]="username" placeholder="Enter Name">
+
+<p [ngClass]="{ 'highlighted': isHighlighted }">Dynamic Class</p>
+
+<p [ngStyle]="{ color: isError ? 'red' : 'green' }">Conditional Styling</p>
+
+<button [disabled]="!isFormValid">Submit</button>
+```
+
+---
+
+## 🔹 **3. Custom Directives**
+You can also create your **own directives**.
+
+### ✅ **Example: Custom Directive to Change Background Color**
+#### **Step 1: Create the Directive**
+```typescript
+import { Directive, ElementRef, HostListener } from '@angular/core';
+
+@Directive({
+  selector: '[appHighlight]'
+})
+export class HighlightDirective {
+  constructor(private el: ElementRef) {}
+
+  @HostListener('mouseenter') onMouseEnter() {
+    this.el.nativeElement.style.backgroundColor = 'yellow';
+  }
+
+  @HostListener('mouseleave') onMouseLeave() {
+    this.el.nativeElement.style.backgroundColor = 'transparent';
+  }
+}
+```
+#### **Step 2: Use the Directive in a Template**
+```html
+<p appHighlight>Hover over me to change background color.</p>
+```
+✅ **Now, this directive will apply a background color change when hovered!**  
+
+---
+
+### 🔥 **Summary**
+| Directive Type | Examples | Purpose |
+|--------------|------------|----------|
+| **Structural Directives** | `*ngIf`, `*ngFor`, `*ngSwitch`, `@if`, `@for` | Modify the structure of the DOM (add/remove elements) |
+| **Attribute Directives** | `[ngClass]`, `[ngStyle]`, `[disabled]`, `[(ngModel)]` | Modify the behavior/appearance of an element |
+| **Custom Directives** | `appHighlight` (Custom) | Create custom behaviors |
+
+
 
