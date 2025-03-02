@@ -529,5 +529,164 @@ You can also **conditionally project content** using `*ngIf`.
 | **Multi-Slot** | `<ng-content select="[slot-name]"></ng-content>` | Pass different sections using attributes |
 | **Conditional Slot** | `<ng-content *ngIf="condition"></ng-content>` | Show or hide projected content dynamically |
 
+# 📌 **Angular Pipes**
+### 🔹 **What are Pipes?**
+Pipes in Angular are **used to transform** displayed data in templates without modifying the original data.  
+They help format **text, numbers, dates, and more**.
+
+---
+
+## 🔹 **1. Built-in Pipes in Angular**
+Angular provides several **built-in pipes**:
+
+| Pipe | Purpose | Example | Output |
+|------|---------|---------|--------|
+| **`uppercase`** | Converts text to uppercase | `{{ 'hello' | uppercase }}` | `HELLO` |
+| **`lowercase`** | Converts text to lowercase | `{{ 'HELLO' | lowercase }}` | `hello` |
+| **`titlecase`** | Capitalizes the first letter of each word | `{{ 'angular pipes' | titlecase }}` | `Angular Pipes` |
+| **`date`** | Formats dates | `{{ today | date:'short' }}` | `2/27/25, 10:00 AM` |
+| **`currency`** | Formats numbers as currency | `{{ 1000 | currency:'USD' }}` | `$1,000.00` |
+| **`percent`** | Converts numbers to percentage | `{{ 0.25 | percent }}` | `25%` |
+| **`json`** | Displays JSON objects as a string | `{{ user | json }}` | `{"name": "John", "age": 25}` |
+| **`slice`** | Extracts a portion of an array or string | `{{ 'Angular' | slice:0:3 }}` | `Ang` |
+
+---
+
+## 🔹 **2. Using Pipes in Angular**
+Pipes are **used inside templates** with the `|` (pipe) symbol.
+
+### ✅ **Example: Using Built-in Pipes**
+```html
+<p>Uppercase: {{ 'hello' | uppercase }}</p>
+<p>Lowercase: {{ 'HELLO' | lowercase }}</p>
+<p>Title Case: {{ 'angular pipes' | titlecase }}</p>
+<p>Formatted Date: {{ today | date:'fullDate' }}</p>
+<p>Currency: {{ 1000 | currency:'USD' }}</p>
+```
+
+#### **In Component (`.ts` file):**
+```typescript
+export class ExampleComponent {
+  today = new Date();
+}
+```
+
+**🔹 Output:**
+```
+Uppercase: HELLO
+Lowercase: hello
+Title Case: Angular Pipes
+Formatted Date: Thursday, February 27, 2025
+Currency: $1,000.00
+```
+
+---
+
+## 🔹 **3. Chaining Multiple Pipes**
+You can apply **multiple pipes** in a single expression:
+
+### ✅ **Example**
+```html
+<p>Formatted Price: {{ 2500 | currency:'USD':'symbol' | uppercase }}</p>
+```
+**Output:** `$2,500.00`
+
+---
+
+## 🔹 **4. Parameterized Pipes**
+Some pipes **accept parameters** to customize the output.
+
+### ✅ **Example: `date` Pipe with Parameters**
+```html
+<p>Short Date: {{ today | date:'shortDate' }}</p>
+<p>Full Date: {{ today | date:'fullDate' }}</p>
+<p>Custom Format: {{ today | date:'dd/MM/yyyy' }}</p>
+```
+**🔹 Output:**
+```
+Short Date: 2/27/25
+Full Date: Thursday, February 27, 2025
+Custom Format: 27/02/2025
+```
+
+---
+
+## 🔹 **5. Creating a Custom Pipe**
+You can create **your own pipe** using the `@Pipe` decorator.
+
+### ✅ **Example: Creating a Pipe to Reverse Strings**
+#### **Step 1: Generate a Pipe**
+```sh
+ng generate pipe reverse
+# or shorthand
+ng g p reverse
+```
+#### **Step 2: Implement the Pipe (`reverse.pipe.ts`)**
+```typescript
+import { Pipe, PipeTransform } from '@angular/core';
+
+@Pipe({
+  name: 'reverse'
+})
+export class ReversePipe implements PipeTransform {
+  transform(value: string): string {
+    return value.split('').reverse().join('');
+  }
+}
+```
+#### **Step 3: Use the Pipe in a Template**
+```html
+<p>Reversed: {{ 'Angular' | reverse }}</p>
+```
+**Output:**  
+```
+Reversed: ralugnA
+```
+
+---
+
+## 🔹 **6. Pure vs Impure Pipes**
+### ✅ **Pure Pipe (Default)**
+- Only re-executes if **input value changes**.
+- **Faster performance**.
+- Used for **static transformations** (e.g., uppercase, date).
+
+✅ **Example: Default Pure Pipe**
+```typescript
+@Pipe({ name: 'reverse' })
+export class ReversePipe implements PipeTransform {
+  transform(value: string): string {
+    return value.split('').reverse().join('');
+  }
+}
+```
+
+### ❌ **Impure Pipe**
+- Runs **on every change detection cycle**.
+- Used for **dynamic transformations** (e.g., filtering lists).
+- **Can slow down performance**.
+
+✅ **Example: Marking a Pipe as Impure**
+```typescript
+@Pipe({
+  name: 'filter',
+  pure: false // ❗ Runs on every update
+})
+export class FilterPipe implements PipeTransform {
+  transform(tasks: any[], searchTerm: string): any[] {
+    return tasks.filter(task => task.title.includes(searchTerm));
+  }
+}
+```
+---
+
+## 🔥 **Final Summary**
+| Feature | Example | Purpose |
+|---------|---------|---------|
+| **Built-in Pipes** | `uppercase`, `date`, `currency`, `json` | Predefined transformations |
+| **Chaining Pipes** | `{{ price | currency | uppercase }}` | Apply multiple pipes |
+| **Parameterized Pipes** | `{{ today | date:'short' }}` | Customize format |
+| **Custom Pipes** | `@Pipe({ name: 'reverse' })` | Define custom behavior |
+| **Pure vs Impure Pipes** | `pure: false` in `@Pipe` | Performance optimization |
 
 
