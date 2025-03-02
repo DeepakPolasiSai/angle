@@ -436,5 +436,98 @@ export class HighlightDirective {
 | **Attribute Directives** | `[ngClass]`, `[ngStyle]`, `[disabled]`, `[(ngModel)]` | Modify the behavior/appearance of an element |
 | **Custom Directives** | `appHighlight` (Custom) | Create custom behaviors |
 
+# 📌 **Content Projection in Angular**
+
+## 🔹 **What is Content Projection?**
+Content projection in Angular allows you to **pass custom content (HTML) from a parent component into a child component** using `<ng-content>`. This is useful when creating **reusable UI components** like modals, cards, or buttons where the structure is predefined, but the content is dynamic.
+
+---
+
+## 🔹 **Basic Example of Content Projection**
+Imagine you have a **Card Component** where the **title and content** can be dynamically provided by the parent.
+
+### ✅ **Step 1: Define `ng-content` in the Child Component (`card.component.html`)**
+```html
+<div class="card">
+  <h3>Card Title</h3>
+  <ng-content></ng-content>  <!-- Content from parent will be placed here -->
+</div>
+```
+
+### ✅ **Step 2: Use `app-card` in Parent Component**
+```html
+<app-card>
+  <p>This is dynamic content inside the card.</p>
+</app-card>
+```
+**🔹 Output:**  
+```
+[ Card Title ]
+-------------------
+| This is dynamic content inside the card. |
+```
+✅ **The paragraph `<p>` inside `<app-card>` is projected into `<ng-content>` in `card.component.html`.**  
+
+---
+
+## 🔹 **Multi-Slot Content Projection**
+You can have **multiple projection slots** using the `select` attribute.
+
+### ✅ **Step 1: Modify `card.component.html` to Support Multiple Slots**
+```html
+<div class="card">
+  <h3><ng-content select="[card-title]"></ng-content></h3>
+  <p><ng-content select="[card-body]"></ng-content></p>
+</div>
+```
+- **`select="[card-title]"`** → Projects only elements with `card-title` attribute.
+- **`select="[card-body]"`** → Projects only elements with `card-body` attribute.
+
+### ✅ **Step 2: Use Slots in the Parent Component**
+```html
+<app-card>
+  <span card-title>Custom Card Title</span>
+  <p card-body>This is the card content.</p>
+</app-card>
+```
+**🔹 Output:**
+```
+[ Custom Card Title ]
+-------------------
+| This is the card content. |
+```
+✅ **Only elements with matching attributes are projected into specific slots.**
+
+---
+
+## 🔹 **Conditional Projection (`ng-content` with `ngIf`)**
+You can also **conditionally project content** using `*ngIf`.
+
+### ✅ **Example**
+```html
+<div class="card">
+  <h3><ng-content select="[card-title]"></ng-content></h3>
+  <p *ngIf="showBody"><ng-content select="[card-body]"></ng-content></p>
+</div>
+```
+- If `showBody = true`, it **shows the projected content** inside `[card-body]`.
+- If `showBody = false`, it **hides the content**.
+
+---
+
+## 🔹 **When to Use Content Projection?**
+✅ When creating **reusable UI components** (e.g., cards, modals, alerts).  
+✅ When you **don't know the exact content** beforehand.  
+✅ When you need **multiple projection slots** for flexibility.
+
+---
+
+### 🔥 **Final Summary**
+| Feature | Syntax | Purpose |
+|---------|--------|---------|
+| **Single Slot** | `<ng-content></ng-content>` | Pass any content inside a component |
+| **Multi-Slot** | `<ng-content select="[slot-name]"></ng-content>` | Pass different sections using attributes |
+| **Conditional Slot** | `<ng-content *ngIf="condition"></ng-content>` | Show or hide projected content dynamically |
+
 
 
