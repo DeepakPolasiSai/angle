@@ -690,3 +690,17 @@ export class FilterPipe implements PipeTransform {
 | **Pure vs Impure Pipes** | `pure: false` in `@Pipe` | Performance optimization |
 
 
+### Summary of Angular Lifecycle Hooks:
+
+| Lifecycle Hook             | When It's Called                                | Purpose |
+|----------------------------|------------------------------------------------|---------|
+| **`ngOnChanges`**           | Before `ngOnInit` and whenever input properties change. | Respond to changes in `@Input` properties. |
+| **`ngOnInit`**              | Once after the first `ngOnChanges`.            | Perform initialization tasks (e.g., API calls). |
+| **`ngDoCheck`**             | During every change detection cycle.           | Custom change detection logic. |
+| **`ngAfterContentInit`**    | After content is projected into the component. | Initialize content passed via `ng-content`. |
+| **`ngAfterContentChecked`** | After every check of projected content.        | Post-processing after content checking. |
+| **`ngAfterViewInit`**       | After the component’s view and its children are initialized. | Perform tasks related to the view and child components. |
+| **`ngAfterViewChecked`**    | After every check of the component’s view and child views. | Post-processing after view checks. |
+| **`ngOnDestroy`**           | Just before the component is destroyed.       | Clean up resources and unsubscribe from observables. |
+
+Each lifecycle hook allows you to hook into a specific point during the component’s lifecycle, giving you flexibility and control over your component’s behavior.
